@@ -13,26 +13,37 @@ class Bola:
     def dibujar(self,pantalla):
         pg.draw.circle(pantalla,self.color,(self.center_x,self.center_y), self.radio)
    
-    def mover(self,x_max= 800 , y_max =600):
+    def mover(self,raqueta1,raqueta2,x_max= 800 , y_max =600):
         self.center_x += self.vx
         self.center_y += self.vy
-        punto = "0"
 
         if self.center_y  >= y_max - self.radio or self.center_y < self.radio :
             self.vy = self.vy * -1
 
         if self.center_x >=x_max or self.center_x<0:
+             #Guardar Puntos
             if self.center_x >=x_max:
-                punto = "r1"                
+                raqueta1.puntos += 1               
             elif self.center_x<0:
-                punto = "r2"
+                raqueta2.puntos += 1 
                 
             self.center_x = x_max // 2
             self.center_y = y_max // 2 
             
-            self.rebotar()            
-        return punto
-            
+            self.rebotar()
+
+    def comprobar_choque(self,*raquetas):
+        for raqueta_activa in raquetas:
+            if self.derecha >= raqueta_activa.izquierda and \
+                self.izquierda<= raqueta_activa.derecha and \
+                self.abajo>= raqueta_activa.arriba and \
+                self.arriba<= raqueta_activa.abajo:
+                self.rebotar()
+
+                return
+
+
+
     def rebotar(self):
  
             self.vy  = -5

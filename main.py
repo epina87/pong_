@@ -27,10 +27,13 @@ raqueta2 = Raqueta(780,300,w=20,h=120,color=(255,255,255))
 raqueta2.vy = 5
 raqueta1.vy = 5
 
+#Crear Línea Centro
+lin_Centro = Raqueta(400,300,w=5,h=600,color=(0,255,255))
+
 #Crear Texto Player
-miFuente = pg.font.Font(None,20)
-texto_jugador1 = miFuente.render("Player-1",0,(200,60,80)) 
-texto_jugador2 = miFuente.render("Player-2",0,(200,60,80)) 
+miFuente = pg.font.Font(None,30)
+texto_jugador1 = miFuente.render("Player-1",0,(0,255,255)) 
+texto_jugador2 = miFuente.render("Player-2",0,(0,255,255)) 
 
 
 #Bucle Juego
@@ -48,36 +51,29 @@ while not game_over:
     raqueta1.mover(pg.K_w,pg.K_s)
 
     #Mover Bola y retorna punto
-    punto  = bola.mover()
-    
-    #Control Rebote Raqueta
-    if bola.derecha >= raqueta2.izquierda and bola.abajo>= raqueta2.arriba and bola.arriba<= raqueta2.abajo:
-        bola.rebotar()
+    bola.mover(raqueta1,raqueta2)
 
-    elif bola.izquierda <= raqueta1.derecha and bola.abajo>= raqueta1.arriba and bola.arriba<= raqueta1.abajo:
-        bola.rebotar() 
-    
+    #Control Rebote Raqueta
+    bola.comprobar_choque(raqueta1,raqueta2)
+        
     #Guardar Puntos
-    if punto == "r1":
-        raqueta1.puntos += 1 
-    elif punto == "r2":    
-        raqueta2.puntos += 1 
-    Puntos_raqueta2 = miFuente.render(str(raqueta2.puntos),0,(200,60,80))
-    Puntos_raqueta1 = miFuente.render(str(raqueta1.puntos),0,(200,60,80))
+    Puntos_raqueta2 = miFuente.render(str(raqueta2.puntos),0,(0,255,255))
+    Puntos_raqueta1 = miFuente.render(str(raqueta1.puntos),0,(0,255,255))
 
     #Mostrar Objetos
     pantalla_principal.fill((0,0,0))
     bola.dibujar(pantalla_principal)
     raqueta1.dibujar(pantalla_principal)
     raqueta2.dibujar(pantalla_principal)
+    lin_Centro.dibujar(pantalla_principal)
 
     #Mostrar Player
-    pantalla_principal.blit(texto_jugador1,(100,10))
-    pantalla_principal.blit(texto_jugador2,(700,10))
+    pantalla_principal.blit(texto_jugador1,(150,10))
+    pantalla_principal.blit(texto_jugador2,(550,10))
 
     #Mostrar Puntos
-    pantalla_principal.blit(Puntos_raqueta1,(100,500))
-    pantalla_principal.blit(Puntos_raqueta2,(700,500))
+    pantalla_principal.blit(Puntos_raqueta1,(150,500))
+    pantalla_principal.blit(Puntos_raqueta2,(550,500))
 
     #Envió Tarjeta Gráfica
     pg.display.flip()
